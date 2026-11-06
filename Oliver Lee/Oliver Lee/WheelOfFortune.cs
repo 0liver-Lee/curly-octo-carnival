@@ -80,6 +80,7 @@
             {
                 Console.WriteLine($"{students[i].name.PadRight(15)}{students[i].surname.PadRight(25)}{students[i].interest.PadRight(25)}{students[i].score}");
             }
+            Console.WriteLine("\nPress [Enter] to go back");
             Console.ReadLine();
         }
         static void EditStudents(ref Student[] students)
@@ -182,10 +183,10 @@
                                                     sw.WriteLine(students[i].surname);
                                                     sw.WriteLine(students[i].interest);
                                                     sw.WriteLine(students[i].score);
-                                                    i++;
                                                 }
                                                 sw.Close();
                                                 Console.WriteLine("Name saved");
+                                                Console.ReadLine();
                                                 check = true;
                                                 break;
                                             case "n":
@@ -222,10 +223,10 @@
                                                     sw.WriteLine(students[i].surname);
                                                     sw.WriteLine(students[i].interest);
                                                     sw.WriteLine(students[i].score);
-                                                    i++;
                                                 }
                                                 sw.Close();
                                                 Console.WriteLine("Surname saved");
+                                                Console.ReadLine();
                                                 check = true;
                                                 break;
                                             case "n":
@@ -262,10 +263,10 @@
                                                     sw.WriteLine(students[i].surname);
                                                     sw.WriteLine(students[i].interest);
                                                     sw.WriteLine(students[i].score);
-                                                    i++;
                                                 }
                                                 sw.Close();
                                                 Console.WriteLine("Interest saved");
+                                                Console.ReadLine();
                                                 check = true;
                                                 break;
                                             case "n":
@@ -287,7 +288,6 @@
                                     break;
                             }
                         } while (!check);
-                        check = false;
                         break;
                     case "n":
                         check = true;
