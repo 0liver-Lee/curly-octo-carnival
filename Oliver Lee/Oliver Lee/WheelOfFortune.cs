@@ -1,4 +1,6 @@
-﻿namespace Oliver_Lee
+﻿using System.Globalization;
+
+namespace Oliver_Lee
 {
     public struct Student
     {
@@ -54,7 +56,7 @@
                 switch (temp)
                 {
                     case "1":
-                        Play();
+                        Play(ref students);
                         break;
                     case "2":
                         DisplayStudents(students);
@@ -130,9 +132,43 @@
             }
             
         }
-        static void Play()
+        static void Play(ref Student[] students)
         {
+            int[] finalists = new int[10];
+            bool dupe;
+            int hold, h = 0;
+            Random rand = new Random();
 
+            foreach (int i in finalists)
+            {
+                do
+                {
+                    dupe = false;
+                    hold = rand.Next(23);
+                    for (int j = 0; j < finalists.Length; j++)
+                    {
+                        if (hold == finalists[j])
+                        {
+                            dupe = true;
+                        }
+                    }
+                } while (dupe);
+                finalists[h] = hold;
+                h++;
+            }
+            Console.WriteLine($"The finalists are:");
+            for (int i = 0; i < finalists.Length; i++)
+            {
+                Console.WriteLine($"{students[finalists[i]].name.PadRight(15)}{students[finalists[i]].surname}");
+            }
+            Console.WriteLine("\nPress [Enter] to continue");
+            Console.ReadLine();
+            Console.Clear();
+            hold = rand.Next(10);
+            Console.WriteLine("Our player is:");
+            Console.WriteLine($"{students[finalists[hold]].name} {students[finalists[hold]].surname}");
+            Console.WriteLine("\nPress [Enter] to start");
+            Console.ReadLine();
         }
         static void Edit(ref Student[] students, int picked)
         {
