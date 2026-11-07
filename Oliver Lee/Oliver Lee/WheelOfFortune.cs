@@ -18,7 +18,7 @@ namespace Oliver_Lee
             string temp;
             Student tempS;
             bool playing = true, sorted = false;
-            StreamReader sr = new StreamReader(@"wheelOfFortune.txt");
+            StreamReader sr = new StreamReader(@"../../../wheelOfFortune.txt");
 
             while (!sr.EndOfStream)
             {
@@ -136,8 +136,9 @@ namespace Oliver_Lee
         {
             int[] finalists = new int[10];
             bool dupe;
-            int hold, h = 0;
+            int hold, temp = 0;
             Random rand = new Random();
+            int[] values = [-3000, -2000, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 1000, 1200, 1500, 2000, 2500, 3000, 3500, 4000, 5000];
 
             foreach (int i in finalists)
             {
@@ -153,8 +154,8 @@ namespace Oliver_Lee
                         }
                     }
                 } while (dupe);
-                finalists[h] = hold;
-                h++;
+                finalists[temp] = hold;
+                temp++;
             }
             Console.WriteLine($"The finalists are:");
             for (int i = 0; i < finalists.Length; i++)
@@ -169,6 +170,12 @@ namespace Oliver_Lee
             Console.WriteLine($"{students[finalists[hold]].name} {students[finalists[hold]].surname}");
             Console.WriteLine("\nPress [Enter] to start");
             Console.ReadLine();
+            bool win = false;
+            do
+            {
+                temp = rand.Next(24);
+
+            } while (!win);
         }
         static void Edit(ref Student[] students, int picked)
         {
