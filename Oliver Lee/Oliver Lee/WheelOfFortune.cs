@@ -1,4 +1,6 @@
 ﻿using System.Globalization;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Oliver_Lee
 {
@@ -11,6 +13,7 @@ namespace Oliver_Lee
     }
     internal class WheelOfFortune
     {
+        public static bool stop = false;
         static void Main()
         {
             Student[] students = new Student[23];
@@ -134,18 +137,19 @@ namespace Oliver_Lee
         }
         static void Play(ref Student[] students)
         {
-            int[] finalists = new int[10];
-            bool dupe;
+            int[] finalists = new int[10], values = [650, 3500, 900, 5000, 550, 300, 1500, 400, 2500, 850, 3000, 750, -2000, 700, 2000, 450, 1000, 350, 800, -3000, 600, 4000, 1200, 500];
+            bool dupe, check;
             int hold, temp = 0;
+            double x;
             Random rand = new Random();
-            int[] values = [-3000, -2000, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 1000, 1200, 1500, 2000, 2500, 3000, 3500, 4000, 5000];
+            string[] words = ["historical", "understand", "volunteers", "generation", "discovery", "chemistry", "literature", "navigation", "revolution", "confidence"];
 
             foreach (int i in finalists)
             {
                 do
                 {
                     dupe = false;
-                    hold = rand.Next(23);
+                    hold = rand.Next(students.Length);
                     for (int j = 0; j < finalists.Length; j++)
                     {
                         if (hold == finalists[j])
@@ -165,17 +169,142 @@ namespace Oliver_Lee
             Console.WriteLine("\nPress [Enter] to continue");
             Console.ReadLine();
             Console.Clear();
-            hold = rand.Next(10);
+            hold = rand.Next(finalists.Length);
             Console.WriteLine("Our player is:");
             Console.WriteLine($"{students[finalists[hold]].name} {students[finalists[hold]].surname}");
             Console.WriteLine("\nPress [Enter] to start");
             Console.ReadLine();
             bool win = false;
+            string word = words[rand.Next(words.Length)], guessed = new string('_', word.Length), letr;
+            char guess, _ = ' ';
+            int score = 0;
+            char[] guesses = [];
+            
             do
             {
-                temp = rand.Next(24);
+                temp = rand.Next(values.Length);
+                Timer();
+                x = 1;
+                do
+                {
+                    Console.Clear();
+                    Console.WriteLine($"   {values[temp % values.Length]}\n   {values[(temp + 1) % values.Length]}\n>> {values[(temp + 2) % values.Length].ToString().PadRight(6)}<<\n   {values[(temp + 3) % values.Length]}\n   {values[(temp + 4) % values.Length]}");
+                    Thread.Sleep(Convert.ToInt32(Math.Pow(10, x)));
+                    x += 0.03;
+                    temp++;
+                } while (!stop);
+                stop = false;
+                check = false;
+                Thread.Sleep(2000);
+                if (values[(temp + 1) % values.Length] < 0)
+                {
+                    score += values[(temp + 1) % values.Length];
+                    check = true;
+                }
 
+                while (!check)
+                {
+                    Console.Clear();
+                    Console.WriteLine($"Current player: {students[finalists[hold]].name} {students[finalists[hold]].surname}\n");
+                    Console.WriteLine(guessed);
+                    Console.Write($"\nCurrent letter value: {values[(temp + 1) % values.Length]}\nGuessed letters:");
+                    if (guesses.Length > 0)
+                    {
+                        Array.Sort(guesses);
+                        for (int i = 0; i < guesses.Length; i++)
+                        {
+                            if (i % 5 == 0)
+                            {
+                                Console.Write($"\n{guesses[i]} ");
+                            }
+                            else
+                            {
+                                Console.Write($"{guesses[i]} ");
+                            }
+                        }
+                    }
+                    Console.WriteLine($"\n\nScore: {score}");
+                    Console.WriteLine("Guess a letter: (Vowels cost $250)");
+                    Console.Write(">> ");
+                    letr = Console.ReadLine().ToLower();
+                    dupe = false;
+                    if (Char.TryParse(letr, out _))
+                    {
+                        guess = Convert.ToChar(letr);
+                        for (int i = 0; i < guesses.Length; i++)
+                        {
+                            if (guesses[i] == guess)
+                            {
+                                guess = '0';
+                            }
+                        }
+                        switch (guess)
+                        {
+                            case 'a' or 'e' or 'i' or 'o' or 'u':
+                                if (score >= 250)
+                                {
+                                    score -= 250;
+                                    Letter(guess, ref guessed, values[(temp + 1) % values.Length], ref score, word);
+                                    guesses = [.. guesses, guess];
+                                    check = true;
+                                }
+                                else
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine("Not enough money for a vowel");
+                                    Console.ReadLine();
+                                }
+                                break;
+                            case char c when c >= 'a' && c <= 'z':
+                                Letter(guess, ref guessed, values[(temp + 1) % values.Length], ref score, word);
+                                guesses = [.. guesses, guess];
+                                check = true;
+                                break;
+                            default:
+                                Console.Clear();
+                                Console.WriteLine("Please enter a unique alphabetical character");
+                                Console.ReadLine();
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Please enter a single letter");
+                        Console.ReadLine();
+                    }
+                }
+                check = false;
+                Console.Clear();
+                if (guessed == word)
+                {
+                    win = true;
+                    break;
+                }
+                Console.WriteLine(guessed);
+                Console.WriteLine($"\nScore: {score}");
+                Console.WriteLine("\nPress [Enter] to spin again");
+                Console.ReadLine();
             } while (!win);
+        }
+        static void Letter(char guess, ref string guessed, int value, ref int score, string word)
+        {
+            StringBuilder sb = new StringBuilder(guessed);
+            for (int i = 0; i < guessed.Length; i++)
+            {
+                if (guess == word[i])
+                {
+                    sb[i] = guess;
+                    score += value;
+                }
+            }
+            guessed = sb.ToString();
+        }
+        static async Task Timer()
+        {
+            Random rand = new Random();
+            await Task.Delay(rand.Next(6000, 8001));
+            stop = true;
         }
         static void Edit(ref Student[] students, int picked)
         {
