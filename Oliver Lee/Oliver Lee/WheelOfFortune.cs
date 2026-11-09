@@ -33,26 +33,11 @@ namespace Oliver_Lee
             }
             sr.Close();
 
-            do
-            {
-                sorted = true;
-                for (i = 1; i < students.Length; i++)
-                {
-                    if (students[i - 1].surname.CompareTo(students[i].surname) > 0)
-                    {
-                        tempS = students[i - 1];
-                        students[i - 1] = students[i];
-                        students[i] = tempS;
-                        sorted = false;
-                    }
-                }
-            } while (!sorted);
-
             while (playing)
             {
                 Console.Clear();
                 Console.WriteLine("Wheel of Fortune");
-                Console.WriteLine("1. Play\n2. Show contestants\n3. Edit contestants\n0. Quit");
+                Console.WriteLine("1. Play\n2. Leaderboard\n3. Show contestants\n4. Edit contestants\n0. Quit");
                 Console.Write(">> ");
                 temp = Console.ReadLine();
                 Console.Clear();
@@ -62,9 +47,12 @@ namespace Oliver_Lee
                         Play(ref students);
                         break;
                     case "2":
-                        DisplayStudents(students);
+                        Leaderboard(students);
                         break;
                     case "3":
+                        DisplayStudents(students);
+                        break;
+                    case "4":
                         EditStudents(ref students);
                         break;
                     case "0":
@@ -77,11 +65,54 @@ namespace Oliver_Lee
                 }
             }
         }
+        static void Leaderboard(Student[] students)
+        {
+            bool sorted;
+            Student tempS;
+
+            do
+            {
+                sorted = true;
+                for (int i = 1; i < students.Length; i++)
+                {
+                    if (students[i - 1].score.CompareTo(students[i].score) < 0)
+                    {
+                        tempS = students[i - 1];
+                        students[i - 1] = students[i];
+                        students[i] = tempS;
+                        sorted = false;
+                    }
+                }
+            } while (!sorted);
+
+            for (int i = 0; i < 5; i++)
+            {
+                Console.WriteLine($"{students[i].name.PadRight(15)}{students[i].surname.PadRight(25)}{students[i].score}");
+            }
+            Console.WriteLine("\nPress [Enter] to go back");
+            Console.ReadLine();
+        }
         static void DisplayStudents(Student[] students)
         {
-            int i;
+            bool sorted;
+            Student tempS;
 
-            for (i = 0; i < students.Length; i++)
+            do
+            {
+                sorted = true;
+                for (int i = 1; i < students.Length; i++)
+                {
+                    if (students[i - 1].surname.CompareTo(students[i].surname) > 0)
+                    {
+                        tempS = students[i - 1];
+                        students[i - 1] = students[i];
+                        students[i] = tempS;
+                        sorted = false;
+                    }
+                }
+            } while (!sorted);
+
+            for (int i = 0; i < students.Length; i++)
             {
                 Console.WriteLine($"{students[i].name.PadRight(15)}{students[i].surname.PadRight(25)}{students[i].interest.PadRight(25)}{students[i].score}");
             }
