@@ -224,9 +224,10 @@ namespace Oliver_Lee
                         }
                     }
                     Console.WriteLine($"\n\nScore: {score}");
-                    Console.WriteLine("Guess a letter: (Vowels cost $250)");
+                    Console.WriteLine("Guess a letter or type \"guess\" to guess the word: (Vowels cost $250)");
                     Console.Write(">> ");
                     letr = Console.ReadLine().ToLower();
+                    Console.Clear();
                     dupe = false;
                     if (Char.TryParse(letr, out _))
                     {
@@ -250,7 +251,6 @@ namespace Oliver_Lee
                                 }
                                 else
                                 {
-                                    Console.Clear();
                                     Console.WriteLine("Not enough money for a vowel");
                                     Console.ReadLine();
                                 }
@@ -261,7 +261,6 @@ namespace Oliver_Lee
                                 check = true;
                                 break;
                             default:
-                                Console.Clear();
                                 Console.WriteLine("Please enter a unique alphabetical character");
                                 Console.ReadLine();
                                 break;
@@ -269,23 +268,65 @@ namespace Oliver_Lee
                     }
                     else
                     {
-                        Console.Clear();
-                        Console.WriteLine("Please enter a single letter");
-                        Console.ReadLine();
+                        if (letr == "guess")
+                        {
+                            check = true;
+                            Console.WriteLine($"Current player: {students[finalists[hold]].name} {students[finalists[hold]].surname}\n");
+                            Console.WriteLine(guessed);
+                            Console.WriteLine("\nWhat is the word:");
+                            Console.Write(">> ");
+                            letr = Console.ReadLine().ToLower();
+                            if (letr == word)
+                            {
+                                guessed = word;
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("INCORRECT");
+                                Console.ReadLine();
+                                
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Please enter a single letter");
+                            Console.ReadLine();
+                        }
                     }
                 }
                 check = false;
-                Console.Clear();
                 if (guessed == word)
                 {
                     win = true;
-                    break;
                 }
-                Console.WriteLine(guessed);
-                Console.WriteLine($"\nScore: {score}");
-                Console.WriteLine("\nPress [Enter] to spin again");
-                Console.ReadLine();
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine($"Current player: {students[finalists[hold]].name} {students[finalists[hold]].surname}\n");
+                    Console.WriteLine(guessed);
+                    Console.WriteLine($"\nScore: {score}");
+                    Console.WriteLine("\nPress [Enter] to spin again");
+                    Console.ReadLine();
+                }
             } while (!win);
+            Console.Clear();
+            Console.WriteLine($"Current player: {students[finalists[hold]].name} {students[finalists[hold]].surname}\n");
+            Console.WriteLine(word);
+            Console.WriteLine($"\nFinal score: {score}");
+            Console.WriteLine("\nPress [Enter] to end game");
+            Console.ReadLine();
+            StreamWriter sw = new StreamWriter(@"../../../wheelOfFortune.txt");
+            students[finalists[hold]].score += score;
+
+            for (int i = 0; i < students.Length; i++)
+            {
+                sw.WriteLine(students[i].name);
+                sw.WriteLine(students[i].surname);
+                sw.WriteLine(students[i].interest);
+                sw.WriteLine(students[i].score);
+            }
+            sw.Close();
         }
         static void Letter(char guess, ref string guessed, int value, ref int score, string word)
         {
@@ -332,12 +373,12 @@ namespace Oliver_Lee
                             switch (temp)
                             {
                                 case "1":
+                                    Console.Clear();
+                                    Console.WriteLine("Enter a new name");
+                                    Console.Write(">> ");
+                                    change = Console.ReadLine();
                                     do
                                     {
-                                        Console.Clear();
-                                        Console.WriteLine("Enter a new name");
-                                        Console.Write(">> ");
-                                        change = Console.ReadLine();
                                         Console.Clear();
                                         Console.WriteLine($"Updated contestant:\n{change} {students[picked].surname} - {students[picked].interest}\nIs this information correct? (Y/N)");
                                         Console.Write(">> ");
@@ -346,7 +387,7 @@ namespace Oliver_Lee
                                         switch (temp.ToLower())
                                         {
                                             case "y":
-                                                StreamWriter sw = new StreamWriter(@"wheelOfFortune.txt");
+                                                StreamWriter sw = new StreamWriter(@"../../../wheelOfFortune.txt");
                                                 students[picked].name = change;
 
                                                 for (int i = 0; i < students.Length; i++)
@@ -362,6 +403,7 @@ namespace Oliver_Lee
                                                 check = true;
                                                 break;
                                             case "n":
+                                                check = true;
                                                 break;
                                             default:
                                                 Console.WriteLine($"{temp} is not a valid input");
@@ -372,12 +414,12 @@ namespace Oliver_Lee
                                     check = false;
                                     break;
                                 case "2":
+                                    Console.Clear();
+                                    Console.WriteLine("Enter a new surname");
+                                    Console.Write(">> ");
+                                    change = Console.ReadLine();
                                     do
                                     {
-                                        Console.Clear();
-                                        Console.WriteLine("Enter a new surname");
-                                        Console.Write(">> ");
-                                        change = Console.ReadLine();
                                         Console.Clear();
                                         Console.WriteLine($"Updated contestant:\n{students[picked].name} {change} - {students[picked].interest}\nIs this information correct? (Y/N)");
                                         Console.Write(">> ");
@@ -386,7 +428,7 @@ namespace Oliver_Lee
                                         switch (temp.ToLower())
                                         {
                                             case "y":
-                                                StreamWriter sw = new StreamWriter(@"wheelOfFortune.txt");
+                                                StreamWriter sw = new StreamWriter(@"../../../wheelOfFortune.txt");
                                                 students[picked].surname = change;
 
                                                 for (int i = 0; i < students.Length; i++)
@@ -402,6 +444,7 @@ namespace Oliver_Lee
                                                 check = true;
                                                 break;
                                             case "n":
+                                                check = true;
                                                 break;
                                             default:
                                                 Console.WriteLine($"{temp} is not a valid input");
@@ -412,12 +455,12 @@ namespace Oliver_Lee
                                     check = false;
                                     break;
                                 case "3":
+                                    Console.Clear();
+                                    Console.WriteLine("Enter a new interest");
+                                    Console.Write(">> ");
+                                    change = Console.ReadLine();
                                     do
                                     {
-                                        Console.Clear();
-                                        Console.WriteLine("Enter a new interest");
-                                        Console.Write(">> ");
-                                        change = Console.ReadLine();
                                         Console.Clear();
                                         Console.WriteLine($"Updated contestant:\n{students[picked].name} {students[picked].surname} - {change}\nIs this information correct? (Y/N)");
                                         Console.Write(">> ");
@@ -426,7 +469,7 @@ namespace Oliver_Lee
                                         switch (temp.ToLower())
                                         {
                                             case "y":
-                                                StreamWriter sw = new StreamWriter(@"wheelOfFortune.txt");
+                                                StreamWriter sw = new StreamWriter(@"../../../wheelOfFortune.txt");
                                                 students[picked].interest = change;
 
                                                 for (int i = 0; i < students.Length; i++)
@@ -442,6 +485,7 @@ namespace Oliver_Lee
                                                 check = true;
                                                 break;
                                             case "n":
+                                                check = true;
                                                 break;
                                             default:
                                                 Console.WriteLine($"{temp} is not a valid input");
