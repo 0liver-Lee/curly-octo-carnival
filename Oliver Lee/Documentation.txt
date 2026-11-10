@@ -1,0 +1,6 @@
+Extra features:
+Animated wheel spin
+Ability to guess the whole word
+
+Bugs:
+No known bugs

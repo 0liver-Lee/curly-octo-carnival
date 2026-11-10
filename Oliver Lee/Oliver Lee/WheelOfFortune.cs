@@ -19,8 +19,7 @@ namespace Oliver_Lee
             Student[] students = new Student[23];
             int i = 0;
             string temp;
-            Student tempS;
-            bool playing = true, sorted = false;
+            bool playing = true;
             StreamReader sr = new StreamReader(@"../../../wheelOfFortune.txt");
 
             while (!sr.EndOfStream) // Read information from file
@@ -123,7 +122,7 @@ namespace Oliver_Lee
         {
             string temp;
             int i, picked = 0;
-            bool found = false, check = false;
+            bool found = false;
 
             Console.WriteLine("Which contestant would you like to edit?");
             Console.Write(">> ");
